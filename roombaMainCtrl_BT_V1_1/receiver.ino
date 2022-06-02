@@ -20,13 +20,13 @@ void setup()
   Serial.begin(19200);
   
   pinMode(ddPin, OUTPUT);
-  pinMode(ledPin, OUTPUT); //spare if needed for test purpose
-  pinMode(buttonPin, INPUT_PULLUP); //used for "start" for test purposes
+  //pinMode(ledPin, OUTPUT); //spare if needed for test purpose
+ // pinMode(buttonPin, INPUT_PULLUP); //used for "start" for test purposes
 
   delay(2000);
   Serial.print("Roomba Remote Control");
   
-  wakeUp ();   // Wake-up Roomba
+  wakeUp();   // Wake-up Roomba
   startSafe(); // Start Roomba in Safe Mode
 
   // turn-off all LEDs and Display
@@ -38,13 +38,13 @@ void setup()
   cleanDigitLED ();
 
   playSound (1); // start sound
-  while (digitalRead(buttonPin))
-  {  
-    setDebrisLED(ON);
-    writeLEDs ('-', '-', '-', '-');
-  }
+  //while (digitalRead(buttonPin))
+  //{  
+  //  setDebrisLED(ON);
+  //  writeLEDs ('-', '-', '-', '-');
+  //}
   setDebrisLED(OFF);
-  writeLEDs ('s', 't', 'o', 'p');
+  //writeLEDs ('s', 't', 'o', 'p');
   
    playSound (2);
 
@@ -57,6 +57,6 @@ void setup()
 
 void loop() 
 {
-   manualCmd ();
+   manualCmd();
 }
 
