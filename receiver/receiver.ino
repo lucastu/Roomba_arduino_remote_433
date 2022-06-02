@@ -37,7 +37,7 @@ void setup()
   setWarningLED(OFF);
   cleanDigitLED ();
 
-  playSound (1); // start sound
+  //playSound (1); // start sound
   //while (digitalRead(buttonPin))
   //{  
   //  setDebrisLED(ON);
@@ -58,10 +58,44 @@ void setup()
   //driveWheels(20, -20); //un-comment if you want to test Roomba spin
   //driveLeft(20); //un-comment if you want to test Roomba turning left 
 
+ Serial.println("Init over");
 }
 
 void loop() 
 {
-   manualCmd();
+  buttonState = digitalRead(buttonPin);
+  valx = analogRead(analogPinX);
+  valy = analogRead(analogPinY);
+  if (valx < treshold-precision){
+      if (flag==false){
+        key="Gauche"; // Gauche
+        flag=true;
+      }
+  }
+  else if (valx > treshold+precision){
+      if (flag==false){
+        key="droite"; // Droite
+        flag=true;
+      }
+  }
+ 
+  else if (valy < treshold-precision){
+      if (flag==false){
+        key="bas"; // Bas
+        flag=true;
+      }
+  }
+  else if (valy > treshold+precision){
+      if (flag==false){
+        key="haut"; // Haut
+        flag=true;
+      }
+  }
+  
+ else if (key != ""){
+    Serial.println(key);
+    key="";
+    flag=false;     
+  }
+  //End of joystick handeling
 }
-
