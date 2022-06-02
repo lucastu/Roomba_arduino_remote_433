@@ -48,6 +48,11 @@ void setup()
   
    playSound (2);
 
+  
+  //drive (motorSpeed, 0);
+  //driveRight(motorSpeed);
+  //driveLeft(motorSpeed);
+  
   //motorSquareTest(); // un-comment if you want to test Roomba doing a square 
   //turnCW (40, 180);  //un-comment if you want to test Roomba spin clock-wise 180 degrees and stop
   //driveWheels(20, -20); //un-comment if you want to test Roomba spin
