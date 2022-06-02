@@ -1,7 +1,6 @@
 /*------------------------------------------------------------------
-  Roomba Control via BT/Android
+  Roomba Control 
   ==> Main commands according IRobot Open Interface doc:  http://www.irobotweb.com/~/media/MainSite/PDFs/About/STEM/Create/iRobot_Roomba_600_Open_Interface_Spec.pdf?la=enBasic 
-  ==> Using Android app: https://play.google.com/store/apps/details?id=appinventor.ai_mjrovai.MJRoBot_II_BT_Command_V2&hl=en
   ==> Several commands based on Create2 library developed by Dom Amato: https://github.com/brinnLabs/Create2
   Marcelo Jose Rovai - 30 June, 2016 - Visit: http://mjrobot.org
 -------------------------------------------------------------------*/
@@ -9,19 +8,15 @@
 #include "roombaDefines.h"
 #include <SoftwareSerial.h>
 
-// Roomba Create2 connection
+// Roomba connection
 int rxPin=10;
 int txPin=11;
 SoftwareSerial Roomba(rxPin,txPin);
-
-// BT Module (HC-06)
-SoftwareSerial BT1(8, 9); // El pin 8 es Rx y el pin 9 es Tx
 
 //---------------------------------------------
 void setup() 
 {
   Roomba.begin(19200);
-  BT1.begin(19200);
   Serial.begin(19200);
   
   pinMode(ddPin, OUTPUT);
@@ -30,8 +25,6 @@ void setup()
 
   delay(2000);
   Serial.print("Roomba Remote Control");
-  BT1.print("Roomba Remote Control");
-  BT1.println('\n');
   
   wakeUp ();   // Wake-up Roomba
   startSafe(); // Start Roomba in Safe Mode
@@ -64,7 +57,6 @@ void setup()
 
 void loop() 
 {
-   checkBTcmd();  // verify if a comand is received from BT remote control
    manualCmd ();
 }
 
