@@ -21,7 +21,6 @@ void setup()
   
   pinMode(ddPin, OUTPUT);
   //pinMode(ledPin, OUTPUT); //spare if needed for test purpose
- // pinMode(buttonPin, INPUT_PULLUP); //used for "start" for test purposes
 
   delay(2000);
   Serial.print("Roomba Remote Control");
@@ -38,11 +37,6 @@ void setup()
   cleanDigitLED ();
 
   //playSound (1); // start sound
-  //while (digitalRead(buttonPin))
-  //{  
-  //  setDebrisLED(ON);
-  //  writeLEDs ('-', '-', '-', '-');
-  //}
   setDebrisLED(OFF);
   //writeLEDs ('s', 't', 'o', 'p');
   
@@ -63,39 +57,34 @@ void setup()
 
 void loop() 
 {
+  //velocity, -500, 500); //def max and min velocity in mm/s
+  //radius, -2000, 2000); //def max and min radius in mm
+  
   buttonState = digitalRead(buttonPin);
   valx = analogRead(analogPinX);
   valy = analogRead(analogPinY);
+  
+  //Radius from Joystick
   if (valx < treshold-precision){
-      if (flag==false){
-        key="Gauche"; // Gauche
-        flag=true;
-      }
+      radius = map(valx, 0, treshold-precision, -2000, 0);
   }
   else if (valx > treshold+precision){
-      if (flag==false){
-        key="droite"; // Droite
-        flag=true;
-      }
+      radius = map(valx, treshold+precision, 1024 , 0, 2000);
   }
- 
-  else if (valy < treshold-precision){
-      if (flag==false){
-        key="bas"; // Bas
-        flag=true;
-      }
+  else {
+    radius = 0;
+      
+  //Velocity from Joystick 
+  if (valy < treshold-precision){
+      velocity = map(valy, 0, treshold-precision, -500, 0);
   }
   else if (valy > treshold+precision){
-      if (flag==false){
-        key="haut"; // Haut
-        flag=true;
-      }
+      velocity = map(valy, treshold+precision, 1024 , 0, 5000);
   }
-  
- else if (key != ""){
-    Serial.println(key);
-    key="";
-    flag=false;     
+  else{
+    velocity = 0;
   }
-  //End of joystick handeling
+  //End of joystick handeling 
+  drive (radius, velocity);  
+
 }
