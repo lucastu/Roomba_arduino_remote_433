@@ -6,22 +6,26 @@
 -------------------------------------------------------------------*/
 
 #include "roombaDefines.h"
+#include <RCSwitch.h>
 #include <SoftwareSerial.h>
 
 // Roomba connection
 int rxPin=10;
 int txPin=11;
 SoftwareSerial Roomba(rxPin,txPin);
+RCSwitch mySwitch = RCSwitch();
 
 //---------------------------------------------
 void setup() 
 {
   Roomba.begin(19200);
   Serial.begin(19200);
+  mySwitch.enableReceive(0);  // Receiver on interrupt 0 => that is pin #2
   
   pinMode(ddPin, OUTPUT);
-  //pinMode(ledPin, OUTPUT); //spare if needed for test purpose
-
+  
+  pinMode(ddPin, OUTPUT);
+  
   delay(2000);
   Serial.print("Roomba Remote Control");
   
@@ -85,6 +89,20 @@ void loop()
     velocity = 0;
   }
   //End of joystick handeling 
-  drive (radius, velocity);  
-
+    
+  //Radio command handeling  
+  if (mySwitch.available()) {
+    Serial.print("Received :");
+    data =mySwitch.getReceivedValue();
+    Serial.println( data );
+    if (data >= 2048){
+      radius = data & 0b011111111111;
+    }
+    else {
+      velocity = data & 0b011111111111;
+    }
+    mySwitch.resetAvailable();
+  }  
+  //End of Radio command handeling      
+  drive (radius, velocity); 
 }
