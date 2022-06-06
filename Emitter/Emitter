@@ -1,59 +1,35 @@
-/*  Example for different sending methods   
- http://code.google.com/p/rc-switch/   
- Need help? http://forum.ardumote.com*/
 #include <RCSwitch.h>
+
 const int buttonPin = 2;
 const int analogPinX = A3;
 const int analogPinY = A4;
+
 const int treshold = 512;
 const int precision = 50;
-bool flag = false;
+
 int valx = 0;
 int valy = 0;
 int buttonState = 0;
-long int timesincepressed = 0;
-bool buttonpressed = false;
 
 RCSwitch mySwitch = RCSwitch();
+
 void setup() {
-
   Serial.begin(9600);
-
   // Transmitter is connected to Arduino Pin #10  mySwitch.enableTransmit(10);
-
 }
 void loop() {
-  //velocity, -500, 500); //def max and min velocity in mm/s
-  //radius, -2000, 2000); //def max and min radius in mm
-  
   buttonState = digitalRead(buttonPin);
   valx = analogRead(analogPinX);
   valy = analogRead(analogPinY);
   
   //Radius from Joystick
-  if (valx < treshold-precision){
-      radius = map(valx, 0, treshold-precision, -2000, 0);
+  if (valx < treshold-precision OR valx > treshold+precision){
+      mySwitch.send(valx, 24);
   }
-  else if (valx > treshold+precision){
-      radius = map(valx, treshold+precision, 1024 , 0, 2000);
-  }
-  else {
-    radius = 0;
       
   //Velocity from Joystick 
-  if (valy < treshold-precision){
-      velocity = map(valy, 0, treshold-precision, -500, 0);
-  }
-  else if (valy > treshold+precision){
-      velocity = map(valy, treshold+precision, 1024 , 0, 5000);
-  }
-  else{
-    velocity = 0;
+  if (valy < treshold-precision OR valy > treshold+precision){
+      mySwitch.send(valx + 2048, 24);
   }
   //End of joystick handeling 
-  //Valeurs à envoyer (radius, velocity);  
-
-
-  mySwitch.send(radius, 24);
-  mySwitch.send(velocity, 24);
 }
