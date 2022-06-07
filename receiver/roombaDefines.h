@@ -1,4 +1,3 @@
-
 #define clamp(value, min, max) (value < min ? min : value > max ? max : value)
 
 #define ON 1
@@ -22,11 +21,13 @@ bool flag = false;
 int valx = 0;
 int valy = 0;
 int buttonState = 0;
-String key = "" ;
 long int timesincepressed = 0;
 bool buttonpressed = false;
 
-
+unsigned long data;
+int key ;
+int radius;
+int velocity ;
 
 int ledPin=13;
 int ddPin=5; //device detect
@@ -42,6 +43,13 @@ char digit1;
 char digit2;
 char digit3;
 char digit4;
+
+void wakeUp(void);
+void startSafe(void);
+void reset(void);
+void drive(int velocity, int radius);
+void driveStop(void);
+void playSound (int num);
 
 //blocking sensor functions - these will request data and wait until a response is recieved, then return the response
 

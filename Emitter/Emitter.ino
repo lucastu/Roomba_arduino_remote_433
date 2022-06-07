@@ -7,29 +7,30 @@ const int analogPinY = A4;
 const int treshold = 512;
 const int precision = 50;
 
-int valx = 0;
-int valy = 0;
+unsigned long valx = 0;
+unsigned long valy = 0;
 int buttonState = 0;
-
+unsigned long key = 4;
+unsigned long data =0;
 RCSwitch mySwitch = RCSwitch();
 
 void setup() {
   Serial.begin(9600);
-  // Transmitter is connected to Arduino Pin #10  mySwitch.enableTransmit(10);
+    // Transmitter is connected to Arduino Pin #10  
+  mySwitch.enableTransmit(10);
 }
 void loop() {
   buttonState = digitalRead(buttonPin);
   valx = analogRead(analogPinX);
   valy = analogRead(analogPinY);
   
-  //Radius from Joystick
-  if (valx < treshold-precision OR valx > treshold+precision){
-      mySwitch.send(valx, 24);
-  }
-      
-  //Velocity from Joystick 
-  if (valy < treshold-precision OR valy > treshold+precision){
-      mySwitch.send(valx + 2048, 24);
-  }
+  data =(key<<28) |(valx<<12) | (valy);
+  mySwitch.send(data, 32);
+  Serial.print("valx :");
+  Serial.print(valx);
+  Serial.print(", valy :");
+  Serial.print(valy);
+  Serial.print(", data :");
+  Serial.println(data);
   //End of joystick handeling 
 }

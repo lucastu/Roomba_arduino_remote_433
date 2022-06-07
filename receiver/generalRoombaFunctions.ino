@@ -1,6 +1,6 @@
 
 // wake up the robot
-void wakeUp (void)
+void wakeUp(void)
 {
   setWarningLED(ON);
   digitalWrite(ddPin, HIGH);
@@ -82,4 +82,3 @@ void playSound (int num)
   }
 }
  
-

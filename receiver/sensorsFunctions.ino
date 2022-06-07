@@ -77,4 +77,3 @@ bool is_in_array(byte val)
   }
   return false;
 }
-
