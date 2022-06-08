@@ -23,6 +23,7 @@ int valy = 0;
 int buttonState = 0;
 long int timesincepressed = 0;
 bool buttonpressed = false;
+int calculatedKey;
 
 unsigned long data;
 int key ;
