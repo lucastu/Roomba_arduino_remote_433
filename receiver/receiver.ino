@@ -50,8 +50,10 @@ void loop()
   if (mySwitch.available()) {
     data = mySwitch.getReceivedValue();
     key = data >> 28;
-
-    if (key == 4) {
+    data = data & 0xffffff;
+    calculatedKey =  data%15
+    // calculatedKey is a checksum
+    if (key == calculatedKey) { 
       valx = (data >> 12) & 0xfff;
       valy = data & 0xfff;
 //      Serial.print("valx :");
@@ -60,28 +62,28 @@ void loop()
 //      Serial.print(valy);
 //      Serial.print(", data :");
 //      Serial.println(data);
+
+        if (valx < treshold - precision) {
+          radius = map(valx, 0, treshold - precision, -2000, 0);
+        }
+        else if (valx > treshold + precision) {
+          radius = map(valx, treshold + precision, 1024 , 0, 2000);
+        }
+        else {
+          radius = 0;
+        }
+        //Velocity from Joystick
+        if (valy < treshold - precision) {
+          velocity = map(valy, 0, treshold - precision, -500, 0);
+        }
+        else if (valy > treshold + precision) {
+          velocity = map(valy, treshold + precision, 1024 , 0, 500);
+        }
+        else {
+          velocity = 0;
+        }
     }
     mySwitch.resetAvailable();
-    if (valx < treshold - precision) {
-      radius = map(valx, 0, treshold - precision, -2000, 0);
-    }
-    else if (valx > treshold + precision) {
-      radius = map(valx, treshold + precision, 1024 , 0, 2000);
-    }
-    else {
-      radius = 0;
-    }
-    //Velocity from Joystick
-    if (valy < treshold - precision) {
-      velocity = map(valy, 0, treshold - precision, -500, 0);
-    }
-    else if (valy > treshold + precision) {
-      velocity = map(valy, treshold + precision, 1024 , 0, 500);
-    }
-    else {
-      velocity = 0;
-    }
-
       Serial.print("radius :");
       Serial.print(radius);
       Serial.print(", velocity :");
@@ -89,6 +91,4 @@ void loop()
     drive (radius, velocity);
   }
   //End of Radio command handeling
-
-
 }
