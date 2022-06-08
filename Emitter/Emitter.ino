@@ -10,7 +10,7 @@ const int precision = 50;
 unsigned long valx = 0;
 unsigned long valy = 0;
 int buttonState = 0;
-unsigned long key = 4;
+unsigned long key = 0;
 unsigned long data =0;
 RCSwitch mySwitch = RCSwitch();
 
@@ -24,7 +24,9 @@ void loop() {
   valx = analogRead(analogPinX);
   valy = analogRead(analogPinY);
   
-  data =(key<<28) |(valx<<12) | (valy);
+  data =(valx<<12) | (valy);
+  key = data %15; //Generate a check key
+  data =(key<<28) | data ;
   mySwitch.send(data, 32);
   Serial.print("valx :");
   Serial.print(valx);
